@@ -92,6 +92,21 @@ export const registerIpc = (application: Application): void => {
   );
 
   ipcMain.handle(
+    Channel.appDefaultAppsSettings,
+    guard(async () => {
+      // Windows will not let an application make itself the default handler —
+      // the UserChoice key has been hash-protected since Windows 8, and an app
+      // that writes it gets reset. Opening the Settings page Docket is
+      // registered on is the honest version of "set as default": one click,
+      // made by the person who owns the machine.
+      //
+      // The URI is a constant, never anything read out of a document.
+      await shell.openExternal('ms-settings:defaultapps?registeredAppUser=Docket');
+      return true;
+    })
+  );
+
+  ipcMain.handle(
     Channel.documentExport,
     guard(async (event, request: ExportRequest) => {
       const descriptor = EXPORT_TARGETS.find((entry) => entry.target === request.target);

@@ -72,6 +72,11 @@ const api = {
       };
     }
   },
+  app: {
+    /** Opens Windows Settings at Docket's default-apps entry. */
+    openDefaultAppsSettings: (): Promise<IpcResult<boolean>> =>
+      ipcRenderer.invoke(Channel.appDefaultAppsSettings)
+  },
   shell: {
     /** Paths passed to the .exe by Explorer, or by a second launch. */
     onOpenPaths: (listener: (paths: string[]) => void) => {

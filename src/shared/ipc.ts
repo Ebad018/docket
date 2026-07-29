@@ -20,7 +20,8 @@ export const Channel = {
   windowClose: 'window:close',
   windowStateChanged: 'window:state-changed',
 
-  appOpenExternalRequest: 'app:open-external-request'
+  appOpenExternalRequest: 'app:open-external-request',
+  appDefaultAppsSettings: 'app:default-apps-settings'
 } as const;
 
 export type ChannelName = (typeof Channel)[keyof typeof Channel];

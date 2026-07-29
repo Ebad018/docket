@@ -131,6 +131,13 @@ export const App = () => {
         group: 'Listing',
         label: 'Write the four sample documents',
         run: () => void session.restoreSamples()
+      },
+      {
+        id: 'default-apps',
+        group: 'Windows',
+        label: 'Make Docket the default for .md, .docx, .xlsx and .pdf…',
+        hint: 'opens Settings',
+        run: () => void window.docket.app.openDefaultAppsSettings()
       }
     ];
 

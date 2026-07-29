@@ -146,8 +146,43 @@ than failing quietly:
 | `Ctrl` `W` | Close the current document |
 | `Ctrl` `Tab` | Next open document |
 
-You can also drag files onto the listing, or set Docket as the default
-application for any of the supported formats during installation.
+You can also drag files onto the listing.
+
+## Opening files from Explorer
+
+**Run the installer, not the portable build.** Windows learns about an
+application from the registry, and only `Docket-1.0.0-x64.exe` writes those
+keys. Launching `Docket.exe` directly — from `release/win-unpacked/` or as the
+portable build — registers nothing, which is why Docket will not appear under
+*Open with* no matter how many files you have opened with it.
+
+Installing registers, per user:
+
+| Key | What it does |
+|---|---|
+| `Classes\Docket.md` (and `.docx`, `.xlsx`, `.pdf`) | The type: its name, icon and open command |
+| `Classes\.md\OpenWithProgids\Docket.md` | Puts Docket in Explorer's *Open with* list |
+| `Classes\Applications\Docket.exe` | Friendly name and supported types |
+| `Software\Docket\Capabilities` + `RegisteredApplications` | Makes Docket a first-class entry in **Settings → Default apps** |
+
+Each format gets its own document icon in Explorer, colour-coded to match the
+listing's format tabs.
+
+### Becoming the default
+
+Docket registers itself as a *candidate* for these formats. It does not seize
+the default, because it cannot: since Windows 8 the `UserChoice` key that
+records your default is hash-protected, and any application that writes it
+directly gets overridden. Installers that claim otherwise are either lying or
+about to be reset by Windows.
+
+Making it the default is therefore one deliberate action, taken once:
+
+- **One format:** right-click a file → *Open with* → *Choose another app* →
+  Docket → **Always use this app**.
+- **All four at once:** the command palette (`Ctrl K`) has *Make Docket the
+  default for .md, .docx, .xlsx and .pdf…*, which opens Windows Settings at
+  Docket's own entry. Or go to Settings → Apps → Default apps → Docket.
 
 ## Privacy
 

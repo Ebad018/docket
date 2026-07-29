@@ -32,6 +32,46 @@ const SVG_PATHS = {
   small: join(ROOT, 'build', 'icon-small.svg')
 };
 
+/**
+ * Document icons for Explorer, one per format.
+ *
+ * A sheet rather than a tile: these sit next to other documents in a folder,
+ * so they read as paper with a stock tab, using the same card-stock colours
+ * the listing uses. The code is dropped below 32px, where three letters across
+ * 20 pixels is a smudge.
+ */
+// `key` feeds an element id, so it stays free of dots — `#file-md.ico` would
+// parse as an id plus a class and silently match nothing.
+const FILE_ICONS = [
+  { key: 'md', file: 'file-md.ico', code: 'MD', stock: '#cfa96a' },
+  { key: 'docx', file: 'file-docx.ico', code: 'DOC', stock: '#7d9ab6' },
+  { key: 'xlsx', file: 'file-xlsx.ico', code: 'XLS', stock: '#8aa86a' },
+  { key: 'pdf', file: 'file-pdf.ico', code: 'PDF', stock: '#c48a80' }
+];
+
+const documentSvg = (code, stock, withCode) => `
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" shape-rendering="crispEdges">
+  <rect x="34" y="14" width="188" height="228" fill="#f4f6ec"/>
+  <rect x="34" y="14" width="188" height="228" fill="none" stroke="#12160f" stroke-width="8"/>
+  <g>
+    <rect x="38" y="54"  width="180" height="26" fill="#cadfba"/>
+    <rect x="38" y="106" width="180" height="26" fill="#cadfba"/>
+    <rect x="38" y="158" width="180" height="26" fill="#cadfba"/>
+  </g>
+  <g fill="#6a7360">
+    <rect x="60" y="32"  width="96"  height="10"/>
+    <rect x="60" y="84"  width="128" height="10"/>
+    <rect x="60" y="136" width="104" height="10"/>
+  </g>
+  <rect x="34" y="184" width="188" height="58" fill="${stock}"/>
+  ${
+    withCode
+      ? `<text x="128" y="228" text-anchor="middle" font-family="Consolas, 'Courier New', monospace"
+             font-size="46" font-weight="700" fill="#241c0c" shape-rendering="geometricPrecision">${code}</text>`
+      : ''
+  }
+</svg>`;
+
 /** The window stays this big; only the SVG inside it changes size. */
 const CANVAS = 512;
 
@@ -56,8 +96,9 @@ const makeRenderer = async (variants) => {
        svg{display:none;position:absolute;top:0;left:0}
        svg.on{display:block}
      </style>
-     <div id="detailed">${variants.detailed}</div>
-     <div id="small">${variants.small}</div>`,
+     ${Object.entries(variants)
+       .map(([key, svg]) => `<div id="${key}">${svg}</div>`)
+       .join('\n     ')}`,
     'utf8'
   );
 
@@ -158,7 +199,13 @@ app.whenReady().then(async () => {
   try {
     const strip = (path) => readFileSync(path, 'utf8').replace(/<!--[\s\S]*?-->/g, '').trim();
     const variants = { detailed: strip(SVG_PATHS.detailed), small: strip(SVG_PATHS.small) };
+    for (const { key, code, stock } of FILE_ICONS) {
+      variants[`doc-${key}-big`] = documentSvg(code, stock, true);
+      variants[`doc-${key}-small`] = documentSvg(code, stock, false);
+    }
+
     mkdirSync(join(ROOT, 'build'), { recursive: true });
+    mkdirSync(join(ROOT, 'build', 'icons'), { recursive: true });
 
     const { renderAt, dispose } = await makeRenderer(variants);
 
@@ -171,6 +218,22 @@ app.whenReady().then(async () => {
 
     writeFileSync(ICO_PATH, buildIco(entries));
     writeFileSync(PNG_PATH, await renderAt(CANVAS, 'detailed'));
+
+    for (const { key, file } of FILE_ICONS) {
+      const parts = [];
+      for (const size of SIZES) {
+        // Three letters need about 10 physical pixels of height to survive.
+        // Below 64px the coloured band alone carries the format.
+        parts.push({
+          size,
+          png: await renderAt(size, `doc-${key}-${size < 64 ? 'small' : 'big'}`)
+        });
+      }
+      writeFileSync(join(ROOT, 'build', 'icons', file), buildIco(parts));
+      process.stdout.write(`  ${file}`);
+    }
+    process.stdout.write('\n');
+
     dispose();
 
     const ico = readFileSync(ICO_PATH);
