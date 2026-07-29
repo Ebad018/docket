@@ -298,6 +298,36 @@ intermediate is the seam between them, and it travels over IPC as plain data.
 
 ![The listing in the light theme](docs/screenshots/listing-light.png)
 
+## Releasing
+
+Versions follow [semantic versioning](https://semver.org) — see
+[CHANGELOG.md](CHANGELOG.md) for the rules and the history.
+
+Not every commit gets a version. The version changes when something is
+**released** — when installers are built and published for people to download.
+A dozen commits can land under one bump.
+
+```bash
+npm version patch
+```
+
+`patch` for bug fixes only (`1.1.0` → `1.1.1`), `minor` for new functionality
+(`1.1.0` → `1.2.0`), `major` for anything that breaks an existing user
+(`1.1.0` → `2.0.0`). When a release carries both fixes and features, the larger
+bump wins. The command updates `package.json`, commits it and creates a `v` tag.
+
+Then publish it:
+
+1. Add a section at the top of `CHANGELOG.md` — Added / Fixed / Changed.
+2. `npm run dist` — artifact names pick up the new version automatically.
+3. `git push && git push --tags`
+4. On GitHub: **Releases → Draft a new release**, pick the tag, paste the
+   changelog section, attach both `.exe` files from `release/`.
+
+Installers are deliberately not committed. A 90 MB binary per version would
+bloat the history permanently, and git cannot forget it afterwards. Releases
+are where binaries belong.
+
 ## Licence
 
 [MIT](LICENSE) © ibadullah Khalid
