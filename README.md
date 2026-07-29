@@ -258,25 +258,6 @@ intermediate is the seam between them, and it travels over IPC as plain data.
 - The listing database is flushed through a temp-file rename, which is atomic on
   NTFS: a crash mid-write leaves the previous listing intact.
 
-## Development
-
-```bash
-npm run typecheck
-```
-
-Two separate TypeScript projects — `tsconfig.node.json` for main and preload,
-`tsconfig.web.json` for the renderer — because they have genuinely different
-lib and DOM assumptions.
-
-The application icon is generated from `build/icon.svg` (and `icon-small.svg`
-for the taskbar sizes) with:
-
-```bash
-npm run icons
-```
-
-See [DESIGN.md](DESIGN.md) for the visual system, and [PRODUCT.md](PRODUCT.md)
-for the product record the design was built against.
 
 ## Light theme
 

@@ -79,6 +79,13 @@
   grid-template-columns: 1fr;
 }
 
+/* Both panes stay in the tree so the editor is never torn down; the mode
+   collapses the one that is not wanted. */
+.md--preview .md__pane--source,
+.md--source .md__pane--preview {
+  display: none;
+}
+
 .md__pane {
   min-width: 0;
   min-height: 0;
@@ -87,7 +94,7 @@
   flex-direction: column;
 }
 
-.md__pane + .md__pane {
+.md--split .md__pane--preview {
   border-left: 1px solid var(--rule-hard);
 }
 

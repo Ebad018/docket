@@ -112,6 +112,12 @@ export const MarkdownViewer = ({ deck, updateDraft, onReadout, onSave }: ViewerP
   // Created once per open document, keyed on the deck and its path only.
   // Depending on the payload as well would rebuild the editor after every
   // save — throwing away undo history and dropping the cursor to line 1.
+  //
+  // The host element it attaches to must therefore outlive every mode change.
+  // It does: both panes stay mounted and the hidden one is collapsed in CSS.
+  // Unmounting the pane instead took CodeMirror's DOM with it while this
+  // effect kept its stale deps, so nothing ever rebuilt the editor and Split
+  // came back empty — and the orphaned view leaked its measure loop.
   useEffect(() => {
     if (!hostRef.current) return undefined;
     const view = new EditorView({
@@ -129,6 +135,12 @@ export const MarkdownViewer = ({ deck, updateDraft, onReadout, onSave }: ViewerP
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deck.id, deck.document.meta.filePath, extensions]);
+
+  // A pane that was display:none has no geometry, so CodeMirror's cached
+  // measurements are wrong the moment it is shown again at a new width.
+  useEffect(() => {
+    viewRef.current?.requestMeasure();
+  }, [mode]);
 
   const html = useMemo(() => renderMarkdown(text), [text]);
   const headings = useMemo(() => outline(text), [text]);
@@ -219,20 +231,18 @@ export const MarkdownViewer = ({ deck, updateDraft, onReadout, onSave }: ViewerP
         </p>
       </div>
 
+      {/* Both panes are always mounted; the mode class hides one. Conditional
+          rendering would destroy the editor on every switch. */}
       <div className={`stage md md--${mode}`} style={{ overflow: 'hidden' }}>
-        {mode !== 'preview' && (
-          <div className="md__pane">
-            <div className="md__editor" ref={hostRef} />
+        <div className="md__pane md__pane--source" aria-hidden={mode === 'preview'}>
+          <div className="md__editor" ref={hostRef} />
+        </div>
+        <div className="md__pane md__pane--preview" aria-hidden={mode === 'source'}>
+          <div className="md__preview">
+            {/* Sanitised in renderMarkdown: tags and URL schemes are allow-listed. */}
+            <div className="prose" dangerouslySetInnerHTML={{ __html: html }} />
           </div>
-        )}
-        {mode !== 'source' && (
-          <div className="md__pane">
-            <div className="md__preview">
-              {/* Sanitised in renderMarkdown: tags and URL schemes are allow-listed. */}
-              <div className="prose" dangerouslySetInnerHTML={{ __html: html }} />
-            </div>
-          </div>
-        )}
+        </div>
       </div>
     </div>
   );

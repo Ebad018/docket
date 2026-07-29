@@ -6,3 +6,5 @@ dist/
 .DS_Store
 Thumbs.db
 *.tsbuildinfo
+DESIGN.md
+PRODUCT.md
