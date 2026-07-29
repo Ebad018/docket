@@ -1,0 +1,440 @@
+/* The machine: title bar, deck tabs, status line, palette, toasts. */
+
+.shell {
+  display: grid;
+  grid-template-rows: var(--titlebar-height) minmax(0, 1fr) var(--statusline-height);
+  height: 100%;
+  background: var(--console-base);
+}
+
+/* Title bar ---------------------------------------------------------- */
+
+.titlebar {
+  display: flex;
+  align-items: stretch;
+  background: var(--console-deep);
+  border-bottom: 1px solid var(--rule-hard);
+  -webkit-app-region: drag;
+}
+
+.titlebar__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--step-2);
+  padding: 0 var(--step-4) 0 var(--step-4);
+  border-right: 1px solid var(--rule-hard);
+  flex: 0 0 auto;
+}
+
+.titlebar__mark {
+  font-family: var(--face-data);
+  font-size: var(--size-small);
+  font-weight: 800;
+  letter-spacing: 0.24em;
+  color: var(--ink-strong);
+}
+
+.titlebar__reel {
+  display: block;
+  width: 10px;
+  height: 10px;
+  border: 1.5px solid var(--ink-faint);
+  border-radius: 50%;
+  position: relative;
+}
+
+.titlebar__reel::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  background: var(--ink-faint);
+  border-radius: 50%;
+}
+
+.titlebar__decks {
+  display: flex;
+  align-items: stretch;
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -webkit-app-region: no-drag;
+}
+
+.titlebar__decks::-webkit-scrollbar {
+  display: none;
+}
+
+.titlebar__controls {
+  display: flex;
+  align-items: stretch;
+  flex: 0 0 auto;
+  border-left: 1px solid var(--rule-hard);
+  -webkit-app-region: no-drag;
+}
+
+.winbutton {
+  width: 44px;
+  display: grid;
+  place-items: center;
+  color: var(--ink-soft);
+  transition: background var(--duration-fast) ease, color var(--duration-fast) ease;
+}
+
+.winbutton:hover {
+  background: var(--console-high);
+  color: var(--ink-strong);
+}
+
+.winbutton--close:hover {
+  background: var(--lamp-red);
+  color: var(--accent-ink);
+}
+
+/* Deck tabs — one per open document ---------------------------------- */
+
+.deck {
+  display: flex;
+  align-items: center;
+  gap: var(--step-2);
+  max-width: 230px;
+  min-width: 0;
+  padding: 0 var(--step-2) 0 var(--step-3);
+  border-right: 1px solid var(--rule-hard);
+  background: transparent;
+  color: var(--ink-soft);
+  font-size: var(--size-base);
+  position: relative;
+  transition: background var(--duration-fast) ease, color var(--duration-fast) ease;
+}
+
+.deck:hover {
+  background: var(--console-base);
+  color: var(--ink);
+}
+
+.deck[aria-current='true'] {
+  background: var(--console-base);
+  color: var(--ink-strong);
+}
+
+.deck[aria-current='true']::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 -1px 0;
+  height: 2px;
+  background: var(--accent);
+}
+
+.deck__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.deck__close {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+  color: var(--ink-faint);
+  opacity: 0;
+}
+
+.deck:hover .deck__close,
+.deck[aria-current='true'] .deck__close,
+.deck__close:focus-visible {
+  opacity: 1;
+}
+
+.deck__close:hover {
+  background: var(--console-high);
+  color: var(--ink-strong);
+}
+
+.deck--home {
+  flex: 0 0 auto;
+  padding-inline: var(--step-4);
+}
+
+/* Annunciator lamp --------------------------------------------------- */
+
+.lamp {
+  width: 7px;
+  height: 7px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: var(--rule-hard);
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.35);
+}
+
+.lamp--red {
+  background: var(--lamp-red);
+  box-shadow: 0 0 6px -1px var(--lamp-red), inset 0 0 0 1px rgb(0 0 0 / 0.25);
+}
+
+.lamp--amber {
+  background: var(--lamp-amber);
+  box-shadow: 0 0 6px -1px var(--lamp-amber), inset 0 0 0 1px rgb(0 0 0 / 0.25);
+}
+
+.lamp--green {
+  background: var(--lamp-green);
+  box-shadow: 0 0 6px -1px var(--lamp-green), inset 0 0 0 1px rgb(0 0 0 / 0.25);
+}
+
+.lamp--off {
+  background: var(--rule-hard);
+}
+
+/* Status line — the console readout ---------------------------------- */
+
+.statusline {
+  display: flex;
+  align-items: center;
+  gap: var(--step-4);
+  padding: 0 var(--step-4);
+  background: var(--console-deep);
+  border-top: 1px solid var(--rule-hard);
+  font-family: var(--face-data);
+  font-size: var(--size-micro);
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+  overflow: hidden;
+}
+
+/* Slots hold their intrinsic width. Left shrinkable, their boxes collapse
+   under their own nowrap text and the readings run together. */
+.statusline__slot {
+  display: flex;
+  align-items: center;
+  gap: var(--step-2);
+  white-space: nowrap;
+  flex: 0 0 auto;
+}
+
+/* The path truncates from the left, so the file name always stays readable.
+   The rtl trick lives on the inner span only — on the flex item it lets the
+   text escape its own box and collide with the readout beside it. */
+.statusline__slot--path {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.statusline__slot--path span {
+  display: block;
+  width: 100%;
+  direction: rtl;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.statusline__value {
+  color: var(--ink-soft);
+}
+
+.statusline button.statusline__slot {
+  transition: color var(--duration-fast) ease;
+}
+
+.statusline button.statusline__slot:hover {
+  color: var(--ink);
+}
+
+/* The one action that lives in the readout, so it needs to read as a control
+   rather than as another measurement. */
+.statusline__slot--action {
+  padding: 0 var(--step-2);
+  height: 18px;
+  border: 1px solid var(--rule-hard);
+  color: var(--ink-soft);
+}
+
+.statusline__slot--action:hover {
+  background: var(--console-high);
+  border-color: var(--accent);
+  color: var(--ink-strong);
+}
+
+/* Command palette ---------------------------------------------------- */
+
+.palette-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgb(0 0 0 / 0.5);
+  display: grid;
+  place-items: start center;
+  padding-top: 12vh;
+  z-index: 40;
+  animation: fade-in var(--duration-fast) ease-out;
+}
+
+.palette {
+  width: min(620px, calc(100vw - 2 * var(--step-6)));
+  background: var(--console-raised);
+  border: 1px solid var(--rule-hard);
+  box-shadow: var(--shadow-lifted);
+  display: flex;
+  flex-direction: column;
+  max-height: 62vh;
+  animation: print-in var(--duration-base) var(--ease-print);
+}
+
+.palette__input {
+  height: 44px;
+  padding: 0 var(--step-4);
+  border: none;
+  border-bottom: 1px solid var(--rule-hard);
+  background: var(--console-deep);
+  font-family: var(--face-data);
+  font-size: var(--size-body);
+  color: var(--ink-strong);
+}
+
+.palette__input:focus {
+  outline: none;
+}
+
+.palette__list {
+  list-style: none;
+  margin: 0;
+  padding: var(--step-1) 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.palette__item {
+  display: flex;
+  align-items: center;
+  gap: var(--step-3);
+  width: 100%;
+  padding: var(--step-2) var(--step-4);
+  text-align: left;
+  color: var(--ink-soft);
+}
+
+.palette__item[aria-selected='true'] {
+  background: var(--selection);
+  color: var(--ink-strong);
+  box-shadow: inset 2px 0 0 var(--accent);
+}
+
+.palette__label {
+  flex: 1 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* The hint yields before the label does — a filename you cannot read is a
+   worse trade than a truncated folder. */
+.palette__hint {
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 46%;
+  font-family: var(--face-data);
+  font-size: var(--size-micro);
+  color: var(--ink-faint);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  direction: rtl;
+  text-align: right;
+}
+
+.palette__empty {
+  padding: var(--step-5) var(--step-4);
+  color: var(--ink-faint);
+  font-size: var(--size-base);
+}
+
+.kbd {
+  display: inline-block;
+  padding: 1px 5px;
+  border: 1px solid var(--rule-hard);
+  background: var(--console-deep);
+  font-family: var(--face-data);
+  font-size: var(--size-micro);
+  color: var(--ink-soft);
+}
+
+/* Toasts — printed slips ---------------------------------------------- */
+
+.toasts {
+  position: fixed;
+  right: var(--step-4);
+  bottom: calc(var(--statusline-height) + var(--step-4));
+  display: flex;
+  flex-direction: column;
+  gap: var(--step-2);
+  z-index: 50;
+  pointer-events: none;
+  max-width: min(440px, calc(100vw - 2 * var(--step-4)));
+}
+
+.toast {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--step-3);
+  padding: var(--step-3) var(--step-4);
+  background: var(--console-raised);
+  border: 1px solid var(--rule-hard);
+  box-shadow: var(--shadow-lifted);
+  pointer-events: auto;
+  animation: print-in var(--duration-print) var(--ease-print);
+}
+
+.toast--error {
+  border-color: var(--lamp-red);
+}
+
+.toast__body {
+  min-width: 0;
+}
+
+.toast__title {
+  font-size: var(--size-base);
+  font-weight: 600;
+  color: var(--ink-strong);
+}
+
+.toast__detail {
+  margin-top: 2px;
+  font-size: var(--size-small);
+  color: var(--ink-soft);
+  overflow-wrap: anywhere;
+}
+
+.toast__dismiss {
+  margin-left: auto;
+  color: var(--ink-faint);
+  padding: 2px;
+}
+
+.toast__dismiss:hover {
+  color: var(--ink-strong);
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes print-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    clip-path: inset(0 0 0 0);
+  }
+}

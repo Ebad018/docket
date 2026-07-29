@@ -1,0 +1,136 @@
+/*
+ * The tabulating room, as tokens.
+ *
+ * Two themes, both authentic to the world: the lit machine room (light —
+ * enamel console, fresh green-bar listing) and the night shift (dark — the
+ * same listing on carbon stock under a single lamp). Dark is the default
+ * because this is a daily driver and the scene is usually a dim office.
+ */
+
+:root {
+  color-scheme: dark;
+
+  /* Console — the machine the listing comes out of. */
+  --console-void: #0c0f0a;
+  --console-deep: #12160f;
+  --console-base: #171b14;
+  --console-raised: #1e2419;
+  --console-high: #262d20;
+  --rule-hard: #333c2b;
+  --rule-soft: #262d20;
+
+  /* Listing stock — alternating bands of continuous fanfold. */
+  --paper: #171b14;
+  --paper-band: #1d2618;
+  --paper-edge: #10130d;
+
+  /* Impact type. */
+  --ink: #e8ecdc;
+  --ink-strong: #f6f8ee;
+  --ink-soft: #a3ad92;
+  /* Tuned to clear 4.5:1 against the console ground, not picked by eye. */
+  --ink-faint: #868f77;
+
+  /* Card stock — format tabs only. */
+  --manila: #cfa96a;
+  --manila-ink: #2a1f0d;
+
+  /* Annunciator lamps — the only colour that carries state. */
+  --lamp-red: #ef5a33;
+  --lamp-red-dim: #7a2d18;
+  --lamp-amber: #f3ac3c;
+  --lamp-amber-dim: #6f4c17;
+  --lamp-green: #86c55c;
+  --lamp-green-dim: #3d5c28;
+
+  --accent: var(--lamp-red);
+  --accent-ink: #1a0b05;
+  --accent-hover: #ff6f47;
+
+  --selection: #2f3a25;
+  --selection-edge: #4d5f3c;
+
+  /* Type. */
+  --face-chrome: 'Archivo Variable', 'Segoe UI', system-ui, sans-serif;
+  --face-data: 'Azeret Mono Variable', 'Cascadia Mono', 'Consolas', monospace;
+
+  --size-micro: 0.6875rem; /* 11px — column headings, stock codes */
+  --size-small: 0.75rem; /* 12px — metadata */
+  --size-base: 0.8125rem; /* 13px — listing rows, controls */
+  --size-body: 0.875rem; /* 14px — document prose */
+  --size-lead: 1rem;
+  --size-title: 1.25rem;
+  --size-display: 1.75rem;
+
+  /* Rhythm. Everything is a multiple of 4; the listing row is 34px so a
+     1440×920 window prints twenty-two lines without scrolling. */
+  --step-1: 0.25rem;
+  --step-2: 0.5rem;
+  --step-3: 0.75rem;
+  --step-4: 1rem;
+  --step-5: 1.5rem;
+  --step-6: 2rem;
+  --step-7: 3rem;
+
+  --row-height: 34px;
+  --titlebar-height: 38px;
+  --statusline-height: 26px;
+  --tractor-width: 18px;
+
+  --ease-print: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 120ms;
+  --duration-base: 180ms;
+  --duration-print: 320ms;
+
+  --shadow-lifted: 0 2px 4px rgb(0 0 0 / 0.32), 0 12px 28px -8px rgb(0 0 0 / 0.5);
+  --shadow-console: 0 1px 0 rgb(255 255 255 / 0.03), 0 8px 24px -12px rgb(0 0 0 / 0.6);
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+
+  --console-void: #a8ada0;
+  --console-deep: #bfc4b7;
+  --console-base: #ced3c5;
+  --console-raised: #dde1d5;
+  --console-high: #e9ece2;
+  --rule-hard: #9aa38e;
+  --rule-soft: #b7bfab;
+
+  --paper: #fbfcf5;
+  --paper-band: #dfebd7;
+  --paper-edge: #b9c1ad;
+
+  --ink: #1b1f16;
+  --ink-strong: #0d1008;
+  --ink-soft: #444c37;
+  --ink-faint: #5b6350;
+
+  --manila: #c69b52;
+  --manila-ink: #2a1f0d;
+
+  --lamp-red: #c5391a;
+  --lamp-red-dim: #eab5a7;
+  --lamp-amber: #b57c0d;
+  --lamp-amber-dim: #ecd7a4;
+  --lamp-green: #457a26;
+  --lamp-green-dim: #bdd8ac;
+
+  --accent: var(--lamp-red);
+  --accent-ink: #fff6f2;
+  --accent-hover: #a82d12;
+
+  --selection: #c6d9b8;
+  --selection-edge: #6f8f57;
+
+  --shadow-lifted: 0 2px 4px rgb(40 46 32 / 0.14), 0 12px 28px -10px rgb(40 46 32 / 0.28);
+  --shadow-console: 0 1px 0 rgb(255 255 255 / 0.5), 0 6px 18px -12px rgb(40 46 32 / 0.4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration-base: 0ms;
+    --duration-print: 0ms;
+  }
+}

@@ -1,0 +1,50 @@
+<!--
+  Docket — application icon, detailed variant (32px and up).
+
+  The listing itself: continuous fanfold stock seated in the machine, banded
+  green, punched down the left margin, with one annunciator-red corner.
+
+  Below 32px this drawing collapses — the frame eats the sheet and the sprocket
+  holes turn to mush — so icon-small.svg carries those sizes instead.
+  Regenerate build/icon.ico with:  npx electron scripts/make-icon.cjs
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" shape-rendering="crispEdges">
+  <!-- Console ground, showing as a narrow frame around the stock. -->
+  <rect width="256" height="256" fill="#12160f"/>
+
+  <!-- Seven bands of 32, alternating paper and green bar. -->
+  <g>
+    <rect x="16" y="16"  width="224" height="32" fill="#f4f6ec"/>
+    <rect x="16" y="48"  width="224" height="32" fill="#c6dcb5"/>
+    <rect x="16" y="80"  width="224" height="32" fill="#f4f6ec"/>
+    <rect x="16" y="112" width="224" height="32" fill="#c6dcb5"/>
+    <rect x="16" y="144" width="224" height="32" fill="#f4f6ec"/>
+    <rect x="16" y="176" width="224" height="32" fill="#c6dcb5"/>
+    <rect x="16" y="208" width="224" height="32" fill="#f4f6ec"/>
+  </g>
+
+  <!-- Printed rules. Three, uneven, so the sheet reads as a listing. -->
+  <g fill="#6a7360">
+    <rect x="68" y="26"  width="104" height="9"/>
+    <rect x="68" y="90"  width="140" height="9"/>
+    <rect x="68" y="154" width="86"  height="9"/>
+  </g>
+
+  <!-- Annunciator corner. The one lit thing on the sheet. -->
+  <rect x="150" y="208" width="90" height="32" fill="#ef5a33"/>
+
+  <!-- Tractor margin, held a shade off the paper. -->
+  <rect x="16" y="16" width="36" height="224" fill="#dde3ce"/>
+  <rect x="52" y="16" width="3" height="224" fill="#12160f" opacity="0.3"/>
+
+  <!-- Sprocket holes, punched through to the machine behind. These opt out of
+       crispEdges: without antialiasing a circle this small renders as a blocky
+       notch, and five mismatched notches read as damage rather than perforation. -->
+  <g fill="#12160f" shape-rendering="geometricPrecision">
+    <circle cx="34" cy="42"  r="10"/>
+    <circle cx="34" cy="86"  r="10"/>
+    <circle cx="34" cy="130" r="10"/>
+    <circle cx="34" cy="174" r="10"/>
+    <circle cx="34" cy="218" r="10"/>
+  </g>
+</svg>

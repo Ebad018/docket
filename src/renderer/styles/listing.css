@@ -1,0 +1,454 @@
+/* The listing: continuous fanfold coming out of the machine. */
+
+.jobstrip {
+  display: flex;
+  align-items: center;
+  gap: var(--step-2);
+  padding: var(--step-3) var(--step-4);
+  background: var(--console-base);
+  border-bottom: 1px solid var(--rule-hard);
+}
+
+.jobstrip__search {
+  position: relative;
+  flex: 0 1 320px;
+  display: flex;
+  align-items: center;
+}
+
+.jobstrip__search .field {
+  width: 100%;
+  padding-left: 30px;
+}
+
+.jobstrip__search svg {
+  position: absolute;
+  left: 8px;
+  color: var(--ink-faint);
+  pointer-events: none;
+}
+
+.jobstrip__filters {
+  display: flex;
+  align-items: center;
+  margin-left: var(--step-2);
+}
+
+.jobstrip__filters .control {
+  border-right-width: 0;
+}
+
+.jobstrip__filters .control:last-child {
+  border-right-width: 1px;
+}
+
+.jobstrip__spacer {
+  flex: 1 1 auto;
+}
+
+.jobstrip__count {
+  font-family: var(--face-data);
+  font-size: var(--size-micro);
+  letter-spacing: 0.06em;
+  color: var(--ink-faint);
+  white-space: nowrap;
+}
+
+/* Fanfold ------------------------------------------------------------ */
+
+.fanfold {
+  display: grid;
+  grid-template-columns: var(--tractor-width) minmax(0, 1fr) var(--tractor-width);
+  background: var(--paper);
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/*
+ * The tractor strip. Sprocket holes are punched clean through to the machine
+ * behind, and the perforation is a real dashed rule, not a border-left accent.
+ */
+.tractor {
+  background:
+    radial-gradient(
+        circle at 50% 8.5px,
+        var(--console-void) 0 3.1px,
+        var(--rule-hard) 3.2px 3.9px,
+        transparent 4px
+      )
+      0 0 / 100% 17px repeat-y,
+    var(--paper);
+  position: relative;
+}
+
+.tractor--left {
+  border-right: 1px dashed var(--rule-hard);
+}
+
+.tractor--right {
+  border-left: 1px dashed var(--rule-hard);
+}
+
+.listing {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.listing__head,
+.listing__row {
+  display: grid;
+  grid-template-columns:
+    46px minmax(200px, 2.2fr) minmax(160px, 3fr)
+    132px 78px 56px 30px;
+  align-items: center;
+  gap: var(--step-3);
+  padding: 0 var(--step-4);
+}
+
+.listing__head {
+  height: 28px;
+  flex: 0 0 auto;
+  background: var(--paper);
+  border-bottom: 1.5px solid var(--rule-hard);
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.listing__heading {
+  font-family: var(--face-data);
+  font-size: var(--size-micro);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+button.listing__heading:hover {
+  color: var(--ink);
+}
+
+.listing__heading[aria-sort='ascending'],
+.listing__heading[aria-sort='descending'] {
+  color: var(--ink);
+}
+
+.listing__heading--right {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+/* The banding is printed on the stock, not drawn per row — so the bars carry
+   on past the last entry and the sheet reads as continuous paper. */
+.listing__body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: repeating-linear-gradient(
+    var(--paper) 0 var(--row-height),
+    var(--paper-band) var(--row-height) calc(2 * var(--row-height))
+  );
+}
+
+.listing__row {
+  height: var(--row-height);
+  width: 100%;
+  text-align: left;
+  color: var(--ink);
+  cursor: pointer;
+  position: relative;
+  transition: background var(--duration-fast) ease;
+}
+
+.listing__row:hover {
+  background: var(--selection);
+}
+
+.listing__row:focus-visible {
+  outline: none;
+  background: var(--selection);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+.listing__row--missing .listing__name,
+.listing__row--missing .listing__folder {
+  color: var(--ink-faint);
+  text-decoration: line-through;
+  text-decoration-color: var(--lamp-red);
+}
+
+/* The authored moment: a freshly opened file prints onto the platen. */
+.listing__row--fresh {
+  animation: platen-advance var(--duration-print) var(--ease-print);
+}
+
+@keyframes platen-advance {
+  from {
+    clip-path: inset(0 0 100% 0);
+    transform: translateY(-6px);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+    transform: none;
+  }
+}
+
+.listing__stock {
+  display: inline-grid;
+  place-items: center;
+  width: 38px;
+  height: 17px;
+  background: var(--manila);
+  color: var(--manila-ink);
+  font-family: var(--face-data);
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  /* A card-stock tab: square-cut on the spine, chamfered on the free corner. */
+  clip-path: polygon(0 0, 100% 0, 100% 65%, 88% 100%, 0 100%);
+}
+
+.listing__stock--md {
+  background: var(--manila);
+}
+.listing__stock--doc {
+  background: #9fb4c9;
+}
+.listing__stock--xls {
+  background: #a8c08c;
+}
+.listing__stock--pdf {
+  background: #d2a29a;
+}
+
+:root[data-theme='light'] .listing__stock--doc {
+  background: #7d9ab6;
+}
+:root[data-theme='light'] .listing__stock--xls {
+  background: #8aa86a;
+}
+:root[data-theme='light'] .listing__stock--pdf {
+  background: #c48a80;
+}
+
+.listing__name {
+  font-family: var(--face-data);
+  font-size: var(--size-base);
+  font-weight: 600;
+  color: var(--ink-strong);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: var(--step-2);
+  min-width: 0;
+}
+
+.listing__name mark,
+.listing__folder mark {
+  background: transparent;
+  color: var(--accent);
+  font-weight: 800;
+}
+
+.listing__folder {
+  font-family: var(--face-data);
+  font-size: var(--size-small);
+  color: var(--ink-soft);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  direction: rtl;
+  text-align: left;
+}
+
+.listing__folder > span {
+  direction: ltr;
+  unicode-bidi: embed;
+}
+
+.listing__when {
+  font-family: var(--face-data);
+  font-size: var(--size-small);
+  color: var(--ink-soft);
+  white-space: nowrap;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.listing__when small {
+  font-size: 10px;
+  color: var(--ink-faint);
+}
+
+.listing__size,
+.listing__runs {
+  font-family: var(--face-data);
+  font-size: var(--size-small);
+  color: var(--ink-soft);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.listing__pin {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  color: var(--ink-faint);
+  opacity: 0;
+  transition: opacity var(--duration-fast) ease, color var(--duration-fast) ease;
+}
+
+.listing__row:hover .listing__pin,
+.listing__pin:focus-visible,
+.listing__pin[aria-pressed='true'] {
+  opacity: 1;
+}
+
+.listing__pin[aria-pressed='true'] {
+  color: var(--lamp-amber);
+}
+
+.listing__pin:hover {
+  color: var(--ink-strong);
+}
+
+/* Row context menu ---------------------------------------------------- */
+
+.rowmenu {
+  position: fixed;
+  z-index: 60;
+  min-width: 200px;
+  padding: var(--step-1) 0;
+  background: var(--console-raised);
+  border: 1px solid var(--rule-hard);
+  box-shadow: var(--shadow-lifted);
+  animation: print-in var(--duration-fast) var(--ease-print);
+}
+
+.rowmenu__item {
+  display: flex;
+  align-items: center;
+  gap: var(--step-3);
+  width: 100%;
+  padding: var(--step-2) var(--step-4);
+  text-align: left;
+  font-size: var(--size-base);
+  color: var(--ink);
+}
+
+.rowmenu__item:hover {
+  background: var(--selection);
+  color: var(--ink-strong);
+}
+
+.rowmenu__item--danger:hover {
+  background: var(--lamp-red);
+  color: var(--accent-ink);
+}
+
+.rowmenu__rule {
+  height: 1px;
+  margin: var(--step-1) 0;
+  background: var(--rule-soft);
+}
+
+/* Empty state — a listing with nothing printed on it yet -------------- */
+
+.emptylisting {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--step-4);
+  padding: var(--step-7) var(--step-6);
+  max-width: 64ch;
+}
+
+.emptylisting__rule {
+  width: 100%;
+  height: 0;
+  border-top: 1.5px solid var(--rule-hard);
+}
+
+.emptylisting__title {
+  font-family: var(--face-data);
+  font-size: var(--size-display);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--ink-strong);
+}
+
+.emptylisting__lede {
+  font-size: var(--size-body);
+  line-height: 1.6;
+  color: var(--ink-soft);
+  max-width: 62ch;
+}
+
+.emptylisting__actions {
+  display: flex;
+  gap: var(--step-2);
+  flex-wrap: wrap;
+}
+
+.emptylisting__formats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--step-4) var(--step-5);
+  padding-top: var(--step-2);
+}
+
+.emptylisting__format {
+  display: flex;
+  align-items: center;
+  gap: var(--step-2);
+  font-family: var(--face-data);
+  font-size: var(--size-small);
+  color: var(--ink-soft);
+}
+
+/* Drop target -------------------------------------------------------- */
+
+.dropveil {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  display: grid;
+  place-items: center;
+  background: color-mix(in srgb, var(--console-void) 74%, transparent);
+  backdrop-filter: blur(2px);
+  pointer-events: none;
+}
+
+.dropveil__frame {
+  padding: var(--step-5) var(--step-7);
+  border: 2px dashed var(--accent);
+  font-family: var(--face-data);
+  font-size: var(--size-lead);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-strong);
+  background: var(--console-deep);
+}
+
+.listing-stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}

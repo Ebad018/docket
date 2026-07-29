@@ -1,0 +1,37 @@
+<!--
+  Docket — application icon, small variant (16, 20, 24px).
+
+  The same sheet, drawn for a taskbar. Everything below a pixel at 16px is
+  removed rather than left to turn to mush: no sprocket holes, no console
+  frame, four fat bands instead of seven, and one thick rule per paper band.
+  What survives is the thing that identifies it — banded stock, a ruled left
+  margin, and a lit corner.
+
+  The dark keyline is the only frame left, and exists so the icon does not
+  dissolve into a light taskbar.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" shape-rendering="crispEdges">
+  <rect width="256" height="256" fill="#12160f"/>
+
+  <!-- Four bands of 58 filling almost the whole tile. -->
+  <g>
+    <rect x="12" y="12"  width="232" height="58" fill="#f4f6ec"/>
+    <rect x="12" y="70"  width="232" height="58" fill="#c6dcb5"/>
+    <rect x="12" y="128" width="232" height="58" fill="#f4f6ec"/>
+    <rect x="12" y="186" width="232" height="58" fill="#c6dcb5"/>
+  </g>
+
+  <!-- One rule per paper band, heavy enough to survive the downscale. -->
+  <g fill="#6a7360">
+    <rect x="80" y="32"  width="130" height="16"/>
+    <rect x="80" y="148" width="104" height="16"/>
+  </g>
+
+  <!-- Annunciator corner, sized to stay a solid dot at 16px. -->
+  <rect x="150" y="186" width="94" height="58" fill="#ef5a33"/>
+
+  <!-- Tractor margin as a solid column: at this scale a punched hole is
+       smaller than a pixel, and the column is what actually reads. -->
+  <rect x="12" y="12" width="50" height="232" fill="#d5dcc4"/>
+  <rect x="62" y="12" width="6" height="232" fill="#12160f" opacity="0.35"/>
+</svg>

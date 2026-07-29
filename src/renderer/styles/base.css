@@ -1,0 +1,212 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--console-void);
+  color: var(--ink);
+  font-family: var(--face-chrome);
+  font-size: var(--size-base);
+  font-synthesis-weight: none;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+  user-select: none;
+}
+
+::selection {
+  background: var(--selection-edge);
+  color: var(--ink-strong);
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+figure {
+  margin: 0;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+/* Scrollbars are machine parts here, not decoration: a recessed channel in
+   the console with a solid slug. Sized to stay comfortably grabbable. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--rule-hard) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+*::-webkit-scrollbar-track {
+  background: color-mix(in srgb, var(--console-void) 60%, transparent);
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--rule-hard);
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--ink-faint);
+  background-clip: content-box;
+}
+
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Shared primitives ------------------------------------------------- */
+
+.stamp {
+  font-family: var(--face-data);
+  font-size: var(--size-micro);
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.control {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--step-2);
+  height: 28px;
+  padding: 0 var(--step-3);
+  border: 1px solid var(--rule-hard);
+  background: var(--console-raised);
+  color: var(--ink);
+  font-family: var(--face-chrome);
+  font-size: var(--size-base);
+  font-weight: 500;
+  white-space: nowrap;
+  transition:
+    background var(--duration-fast) ease,
+    border-color var(--duration-fast) ease,
+    color var(--duration-fast) ease;
+}
+
+.control:hover:not(:disabled) {
+  background: var(--console-high);
+  border-color: var(--ink-faint);
+}
+
+.control:active:not(:disabled) {
+  background: var(--console-deep);
+}
+
+.control:disabled {
+  color: var(--ink-faint);
+  background: var(--console-base);
+  border-color: var(--rule-soft);
+  cursor: not-allowed;
+}
+
+.control[aria-pressed='true'] {
+  background: var(--selection);
+  border-color: var(--selection-edge);
+  color: var(--ink-strong);
+}
+
+.control--primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 650;
+}
+
+.control--primary:hover:not(:disabled) {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+
+.control--primary:active:not(:disabled) {
+  background: var(--accent);
+  filter: brightness(0.88);
+}
+
+.control--primary .kbd {
+  border-color: color-mix(in srgb, var(--accent-ink) 30%, transparent);
+  background: color-mix(in srgb, var(--accent-ink) 14%, transparent);
+  color: var(--accent-ink);
+}
+
+.control--quiet {
+  background: transparent;
+  border-color: transparent;
+}
+
+.control--quiet:hover:not(:disabled) {
+  background: var(--console-high);
+  border-color: var(--rule-hard);
+}
+
+.control--icon {
+  width: 28px;
+  padding: 0;
+  justify-content: center;
+}
+
+.field {
+  height: 28px;
+  padding: 0 var(--step-3);
+  border: 1px solid var(--rule-hard);
+  background: var(--console-deep);
+  color: var(--ink);
+  font-family: var(--face-data);
+  font-size: var(--size-base);
+  user-select: text;
+}
+
+.field::placeholder {
+  color: var(--ink-faint);
+}
+
+.field:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: var(--console-base);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

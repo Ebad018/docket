@@ -1,0 +1,93 @@
+{
+  "name": "docket",
+  "version": "1.0.0",
+  "description": "Docket — one desktop workshop for Markdown, Word, Excel and PDF documents.",
+  "main": "./out/main/index.js",
+  "author": "Docket",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "dev": "electron-vite dev",
+    "start": "electron-vite preview",
+    "typecheck": "tsc --noEmit -p tsconfig.node.json && tsc --noEmit -p tsconfig.web.json",
+    "icons": "electron scripts/make-icon.cjs",
+    "build": "electron-vite build",
+    "postinstall": "electron-builder install-app-deps",
+    "dist": "npm run build && electron-builder --win",
+    "dist:portable": "npm run build && electron-builder --win portable"
+  },
+  "dependencies": {
+    "exceljs": "^4.4.0",
+    "fast-xml-parser": "^4.5.3",
+    "jszip": "^3.10.1",
+    "mammoth": "^1.9.0",
+    "pdf-lib": "^1.17.1",
+    "sql.js": "^1.12.0"
+  },
+  "devDependencies": {
+    "@types/sql.js": "^1.4.9",
+    "pdfjs-dist": "^4.10.38",
+    "@codemirror/commands": "^6.8.0",
+    "@codemirror/lang-markdown": "^6.3.2",
+    "@codemirror/language": "^6.10.8",
+    "@codemirror/search": "^6.5.10",
+    "@codemirror/state": "^6.5.2",
+    "@codemirror/view": "^6.36.4",
+    "@fontsource-variable/archivo": "^5.1.1",
+    "@fontsource-variable/azeret-mono": "^5.1.1",
+    "@lezer/highlight": "^1.2.1",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "@vitejs/plugin-react": "^4.3.4",
+    "electron": "^33.4.11",
+    "electron-builder": "^25.1.8",
+    "electron-vite": "^2.3.0",
+    "marked": "^15.0.7",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "typescript": "^5.7.3",
+    "vite": "^5.4.14"
+  },
+  "build": {
+    "appId": "io.github.ebad018.docket",
+    "productName": "Docket",
+    "directories": {
+      "buildResources": "build",
+      "output": "release"
+    },
+    "files": [
+      "out/**/*",
+      "package.json"
+    ],
+    "asarUnpack": [
+      "**/node_modules/sql.js/dist/**"
+    ],
+    "win": {
+      "icon": "build/icon.ico",
+      "target": [
+        { "target": "nsis", "arch": ["x64"] },
+        { "target": "portable", "arch": ["x64"] }
+      ],
+      "artifactName": "${productName}-${version}-${arch}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "perMachine": false,
+      "shortcutName": "Docket",
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "installerHeaderIcon": "build/icon.ico"
+    },
+    "portable": {
+      "artifactName": "${productName}-${version}-portable.${ext}"
+    },
+    "fileAssociations": [
+      { "ext": "md", "name": "Markdown Document", "role": "Editor" },
+      { "ext": "markdown", "name": "Markdown Document", "role": "Editor" },
+      { "ext": "docx", "name": "Word Document", "role": "Editor" },
+      { "ext": "xlsx", "name": "Excel Workbook", "role": "Editor" },
+      { "ext": "pdf", "name": "PDF Document", "role": "Editor" }
+    ]
+  }
+}
