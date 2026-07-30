@@ -14,6 +14,26 @@ release with one new feature and six fixes is a MINOR, not a PATCH.
 
 ---
 
+## 1.1.1
+
+### Fixed
+
+- **The window could barely be dragged.** The title bar declared itself a drag
+  region, but the document tab strip inside it declared `no-drag` and stretched
+  across the whole middle — so only the 115px block under the wordmark actually
+  moved the window, 8% of the bar. The strip now carries the drag region and
+  only the tabs themselves opt out, and a dedicated 76px grip sits before the
+  window controls so there is always somewhere to grab even with every tab
+  filled. Roughly 70% of the bar is draggable now, and double-clicking it
+  maximises as Windows expects.
+- **Enough open documents pushed the window controls off-screen.** The shell's
+  grid had no explicit column, so the single implicit one was `auto` and sized
+  itself to max-content: with nine tabs open the title bar grew wider than the
+  window, carrying minimise, maximise and close past the right edge. The grid
+  column is now bounded to the viewport.
+
+---
+
 ## 1.1.0
 
 Windows shell integration. Docket can now be opened from Explorer.

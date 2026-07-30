@@ -3,7 +3,13 @@
 .shell {
   display: grid;
   grid-template-rows: var(--titlebar-height) minmax(0, 1fr) var(--statusline-height);
+  /* Without an explicit column the single implicit one is `auto`, which sizes
+     to max-content: enough open documents and the tab strip pushed the grid
+     wider than the window, carrying the window controls off-screen. */
+  grid-template-columns: minmax(0, 1fr);
   height: 100%;
+  width: 100%;
+  overflow: hidden;
   background: var(--console-base);
 }
 
@@ -12,6 +18,8 @@
 .titlebar {
   display: flex;
   align-items: stretch;
+  min-width: 0;
+  overflow: hidden;
   background: var(--console-deep);
   border-bottom: 1px solid var(--rule-hard);
   -webkit-app-region: drag;
@@ -51,6 +59,16 @@
   border-radius: 50%;
 }
 
+/*
+ * The tab strip carries the window's drag region, and only the tabs themselves
+ * opt out. Marking the whole strip no-drag left the window draggable by the
+ * 115px wordmark alone — the strip stretches across the entire middle, so 92%
+ * of the title bar silently refused to move the window.
+ *
+ * The strip still takes all the space it can — the grip below is a fixed
+ * reservation rather than a competitor, so tabs never get squeezed out of view
+ * to make room for it.
+ */
 .titlebar__decks {
   display: flex;
   align-items: stretch;
@@ -59,11 +77,20 @@
   overflow-x: auto;
   overflow-y: hidden;
   scrollbar-width: none;
-  -webkit-app-region: no-drag;
+  -webkit-app-region: drag;
 }
 
 .titlebar__decks::-webkit-scrollbar {
   display: none;
+}
+
+/* A fixed reservation, never a flex competitor: with enough documents open the
+   tab strip would otherwise fill the bar and leave nothing to grab, and making
+   this grow instead collapsed the strip and scrolled the tabs out of sight. */
+.titlebar__grip {
+  flex: 0 0 76px;
+  align-self: stretch;
+  -webkit-app-region: drag;
 }
 
 .titlebar__controls {
@@ -107,6 +134,8 @@
   font-size: var(--size-base);
   position: relative;
   transition: background var(--duration-fast) ease, color var(--duration-fast) ease;
+  /* Clickable, so it must escape the strip's drag region. */
+  -webkit-app-region: no-drag;
 }
 
 .deck:hover {

@@ -93,6 +93,9 @@ export const TitleBar = ({
       })}
     </nav>
 
+    {/* The reliable place to grab the window. Nothing sits on it. */}
+    <div className="titlebar__grip" aria-hidden="true" />
+
     <div className="titlebar__controls">
       <button type="button" className="winbutton" onClick={onMinimize} aria-label="Minimise">
         <IconMinimise size={13} />
