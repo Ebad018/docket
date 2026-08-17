@@ -42,6 +42,19 @@
   color: var(--ink-strong);
 }
 
+/* Stamped alongside the wordmark, the way a machine carries its model number:
+   quiet enough to ignore, always there when you need to know. */
+.titlebar__version {
+  font-family: var(--face-data);
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--ink-faint);
+  padding: 1px 4px;
+  border: 1px solid var(--rule-soft);
+  align-self: center;
+}
+
 .titlebar__reel {
   display: block;
   width: 10px;
@@ -435,8 +448,12 @@
 .toast__detail {
   margin-top: 2px;
   font-size: var(--size-small);
+  line-height: 1.45;
   color: var(--ink-soft);
   overflow-wrap: anywhere;
+  /* Details carry deliberate line breaks — a path, then versions, then a
+     second path. Collapsing them ran the last two lines into each other. */
+  white-space: pre-line;
 }
 
 .toast__dismiss {

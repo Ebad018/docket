@@ -21,10 +21,28 @@ export const Channel = {
   windowStateChanged: 'window:state-changed',
 
   appOpenExternalRequest: 'app:open-external-request',
-  appDefaultAppsSettings: 'app:default-apps-settings'
+  appDefaultAppsSettings: 'app:default-apps-settings',
+  appBuildInfo: 'app:build-info'
 } as const;
 
 export type ChannelName = (typeof Channel)[keyof typeof Channel];
+
+/**
+ * Enough to identify exactly which copy of Docket is running.
+ *
+ * More than one can be installed at once — per-user and per-machine, or a
+ * portable build beside an installed one — and the window looks identical
+ * whichever it is. The executable path is the field that actually settles it.
+ */
+export interface BuildInfo {
+  readonly version: string;
+  readonly electron: string;
+  readonly chromium: string;
+  readonly node: string;
+  readonly executable: string;
+  readonly userData: string;
+  readonly packaged: boolean;
+}
 
 /** Shape of an IPC failure the renderer can render without guessing. */
 export interface IpcFailure {

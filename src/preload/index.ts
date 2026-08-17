@@ -8,7 +8,7 @@ import type {
   SaveResult
 } from '@shared/documents';
 import type { ExportRequest, ExportResult } from '@shared/portable';
-import { Channel, type IpcResult } from '@shared/ipc';
+import { Channel, type BuildInfo, type IpcResult } from '@shared/ipc';
 
 export interface FormatDescriptor {
   readonly kind: DocumentKind;
@@ -75,7 +75,10 @@ const api = {
   app: {
     /** Opens Windows Settings at Docket's default-apps entry. */
     openDefaultAppsSettings: (): Promise<IpcResult<boolean>> =>
-      ipcRenderer.invoke(Channel.appDefaultAppsSettings)
+      ipcRenderer.invoke(Channel.appDefaultAppsSettings),
+    /** Identifies the running build, including which executable it came from. */
+    buildInfo: (): Promise<IpcResult<BuildInfo>> =>
+      ipcRenderer.invoke(Channel.appBuildInfo)
   },
   shell: {
     /** Paths passed to the .exe by Explorer, or by a second launch. */

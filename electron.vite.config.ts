@@ -1,6 +1,7 @@
 import { resolve } from 'node:path';
 import { defineConfig, externalizeDepsPlugin } from 'electron-vite';
 import react from '@vitejs/plugin-react';
+import { version } from './package.json';
 
 export default defineConfig({
   main: {
@@ -24,6 +25,10 @@ export default defineConfig({
   renderer: {
     root: resolve(__dirname, 'src/renderer'),
     plugins: [react()],
+    // Stamped in at build time so the running window can always name its own
+    // build without an IPC round trip. A version the UI never shows is a
+    // version nobody can check.
+    define: { __APP_VERSION__: JSON.stringify(version) },
     resolve: {
       alias: {
         '@shared': resolve(__dirname, 'src/shared'),

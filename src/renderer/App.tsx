@@ -138,6 +138,29 @@ export const App = () => {
         label: 'Make Docket the default for .md, .docx, .xlsx and .pdf…',
         hint: 'opens Settings',
         run: () => void window.docket.app.openDefaultAppsSettings()
+      },
+      {
+        id: 'about',
+        group: 'Windows',
+        label: `About Docket ${__APP_VERSION__}`,
+        hint: 'which build is this?',
+        run: () => {
+          void (async () => {
+            const result = await window.docket.app.buildInfo();
+            if (!result.ok) {
+              session.notify({ tone: 'error', title: 'Could not read the build info.' });
+              return;
+            }
+            const info = result.value;
+            session.notify({
+              tone: 'info',
+              // The executable path is the point: several copies of Docket can
+              // be installed at once and every window looks the same.
+              title: `Docket ${info.version} — ${info.packaged ? 'installed' : 'development'} build`,
+              detail: `Running from ${info.executable}\nElectron ${info.electron} · Chromium ${info.chromium} · Node ${info.node}\nListing at ${info.userData}`
+            });
+          })();
+        }
       }
     ];
 

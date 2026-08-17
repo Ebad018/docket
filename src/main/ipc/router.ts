@@ -1,8 +1,8 @@
 import { dirname, join } from 'node:path';
-import { BrowserWindow, dialog, ipcMain, shell } from 'electron';
+import { app, BrowserWindow, dialog, ipcMain, shell } from 'electron';
 import type { DocumentPatch } from '@shared/documents';
 import { EXPORT_TARGETS, type ExportRequest } from '@shared/portable';
-import { Channel, fail, ok, type IpcResult } from '@shared/ipc';
+import { Channel, fail, ok, type BuildInfo, type IpcResult } from '@shared/ipc';
 import { DocumentError } from '../documents/DocumentHandler';
 import type { Application } from '../composition';
 
@@ -104,6 +104,22 @@ export const registerIpc = (application: Application): void => {
       await shell.openExternal('ms-settings:defaultapps?registeredAppUser=Docket');
       return true;
     })
+  );
+
+  ipcMain.handle(
+    Channel.appBuildInfo,
+    guard(
+      async (): Promise<BuildInfo> => ({
+        version: app.getVersion(),
+        electron: process.versions.electron,
+        chromium: process.versions.chrome,
+        node: process.versions.node,
+        // The field that settles which of several installed copies is running.
+        executable: app.getPath('exe'),
+        userData: app.getPath('userData'),
+        packaged: app.isPackaged
+      })
+    )
   );
 
   ipcMain.handle(

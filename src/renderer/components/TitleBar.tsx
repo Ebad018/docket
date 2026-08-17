@@ -34,6 +34,11 @@ export const TitleBar = ({
     <div className="titlebar__brand">
       <span className="titlebar__reel" />
       <span className="titlebar__mark">DOCKET</span>
+      {/* A model plate. Without it there is no way to tell one build from
+          another, which is exactly how an old install goes unnoticed. */}
+      <span className="titlebar__version" title={`Docket ${__APP_VERSION__}`}>
+        {__APP_VERSION__}
+      </span>
     </div>
 
     <nav className="titlebar__decks" aria-label="Open documents">

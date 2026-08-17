@@ -14,6 +14,24 @@ release with one new feature and six fixes is a MINOR, not a PATCH.
 
 ---
 
+## 1.2.0
+
+### Added
+
+- **The running build names itself.** The version is stamped beside the wordmark
+  in the title bar, and `Ctrl K` → *About Docket* reports the version, the
+  executable it is running from, the listing's location, and the Electron,
+  Chromium and Node versions underneath.
+
+  This exists because of a real confusion: an older Docket installed to
+  `C:\Program Files\Docket` kept answering Explorer's double-clicks while a
+  newer build sat unused in `release/`, and nothing in either window said which
+  was which. Several copies of Docket can be installed at once — per-user,
+  per-machine, portable — and every window looks identical. The executable path
+  is the field that settles it.
+
+---
+
 ## 1.1.1
 
 ### Fixed

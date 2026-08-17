@@ -1,6 +1,6 @@
 {
   "name": "docket",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "Docket — one desktop workshop for Markdown, Word, Excel and PDF documents.",
   "main": "./out/main/index.js",
   "author": "Docket",
